@@ -1,14 +1,52 @@
-import { Text, View } from 'react-native';
-import SpellSlot from './SpellSlot';
+import { Button, View, StyleSheet, ScrollView } from 'react-native';
+
+import SpellSlotsLevel from './SpellSlotsLevel';
 import useSpellSlotsState from './useSpellSlotsState';
 
 export default function SpellSlots() {
-  const { state } = useSpellSlotsState();
+  const {
+    spellSlotsLevels,
+    addLevel,
+    removeLevel,
+    toggleSlot,
+    addSlot,
+    removeSlot,
+  } = useSpellSlotsState();
 
   return (
-    <View>
-      <Text>{JSON.stringify(state, null, 2)}</Text>
-      {/* <SpellSlot isChecked /> */}
+    <View style={styles.container}>
+      <View style={styles.addLevelButtons}>
+        <Button title="Remove Level" onPress={removeLevel} />
+        <Button title="Add Level" onPress={addLevel} />
+      </View>
+
+      <ScrollView style={styles.slotsList}>
+        {spellSlotsLevels.map((slots, levelIndex) => {
+          return (
+            <SpellSlotsLevel
+              addSlot={addSlot}
+              removeSlot={removeSlot}
+              key={levelIndex}
+              toggleSlot={toggleSlot}
+              level={levelIndex + 1}
+              slots={slots}
+            />
+          );
+        })}
+      </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 12,
+  },
+  slotsList: {
+    paddingTop: 24,
+  },
+  addLevelButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+});
