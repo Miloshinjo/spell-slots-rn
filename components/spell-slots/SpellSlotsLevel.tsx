@@ -22,20 +22,22 @@ export default function SpellSlotsLevel({
     <View style={styles.container}>
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>Level {level}</Text>
-        <TouchableOpacity
-          accessibilityLabel="Remove a spell slot"
-          style={styles.button}
-          onPress={() => removeSlot(levelIndex)}
-        >
-          <Text style={styles.buttonText}>-</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          accessibilityLabel="Add a spell slot"
-          style={styles.button}
-          onPress={() => addSlot(levelIndex)}
-        >
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
+        <View style={styles.editButtonsContainer}>
+          <TouchableOpacity
+            accessibilityLabel="Remove a spell slot"
+            style={styles.button}
+            onPress={() => removeSlot(levelIndex)}
+          >
+            <Text style={styles.buttonText}>-</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            accessibilityLabel="Add a spell slot"
+            style={styles.button}
+            onPress={() => addSlot(levelIndex)}
+          >
+            <Text style={styles.buttonText}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.spellSlots}>
         {slots.map((isChecked, slotIndex) => {
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
   headingContainer: {
     flexDirection: 'row',
     paddingBottom: 8,
+    justifyContent: 'space-between',
   },
   headingText: {
     fontSize: 24,
@@ -80,5 +83,8 @@ const styles = StyleSheet.create({
   spellSlots: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+  },
+  editButtonsContainer: {
+    flexDirection: 'row',
   },
 });

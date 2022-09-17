@@ -1,6 +1,8 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
+import useLoadState from './useLoadState';
+import usePersistState from './usePersistState';
 
-type SpellSlotsState = Array<Array<boolean>>;
+export type SpellSlotsState = Array<Array<boolean>>;
 
 type SpellSlotsAction = {
   type:
@@ -8,7 +10,8 @@ type SpellSlotsAction = {
     | 'ADD_LEVEL'
     | 'REMOVE_LEVEL'
     | 'ADD_SLOT'
-    | 'REMOVE_SLOT';
+    | 'REMOVE_SLOT'
+    | 'LOAD_FROM_STORAGE';
   payload?: any;
 };
 
@@ -17,19 +20,12 @@ const initialState: SpellSlotsState = [];
 function reducer(state: SpellSlotsState, action: SpellSlotsAction) {
   switch (action.type) {
     case 'TOGGLE_SLOT':
-      return state.map((level, levelIndex) => {
-        if (levelIndex === action.payload.levelIndex) {
-          return level.map((slot, slotIndex) => {
-            if (slotIndex !== action.payload.slotIndex) {
-              return slot;
-            }
+      const stateCopy = [...state];
 
-            return !slot;
-          });
-        }
+      stateCopy[action.payload.levelIndex][action.payload.slotIndex] =
+        !stateCopy[action.payload.levelIndex][action.payload.slotIndex];
 
-        return level;
-      });
+      return stateCopy;
 
     case 'ADD_LEVEL':
       return [...state, [false]];
@@ -51,6 +47,8 @@ function reducer(state: SpellSlotsState, action: SpellSlotsAction) {
 
         return level.slice(0, -1);
       });
+    case 'LOAD_FROM_STORAGE':
+      return action.payload.storageState as SpellSlotsState;
     default:
       return state;
   }
@@ -58,6 +56,17 @@ function reducer(state: SpellSlotsState, action: SpellSlotsAction) {
 
 export default function useSpellSlotsState() {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  // Persist state to AsyncStorage
+  useLoadState((storageState: SpellSlotsState) => {
+    dispatch({
+      type: 'LOAD_FROM_STORAGE',
+      payload: {
+        storageState,
+      },
+    });
+  });
+  usePersistState(state);
 
   const addLevel = useCallback(() => {
     dispatch({
