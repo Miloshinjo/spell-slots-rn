@@ -52,8 +52,6 @@ export default function SpellSlotsLevel({
   );
 }
 
-export const gap = 10;
-
 const styles = StyleSheet.create({
   container: {
     paddingBottom: 12,
@@ -82,7 +80,5 @@ const styles = StyleSheet.create({
   spellSlots: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginVertical: -(gap / 2),
-    marginHorizontal: -(gap / 2),
   },
 });

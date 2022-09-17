@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { gap } from './SpellSlotsLevel';
 
 interface SpellSlotProps {
   isChecked: boolean;
@@ -27,7 +26,8 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: gap / 2,
-    marginHorizontal: gap / 2,
+
+    marginHorizontal: 3,
+    marginBottom: 4,
   },
 });

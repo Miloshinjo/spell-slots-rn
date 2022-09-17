@@ -20,7 +20,7 @@ export default function SpellSlots() {
         <Button title="Add Level" onPress={addLevel} />
       </View>
 
-      <ScrollView style={styles.slotsList}>
+      <ScrollView>
         {spellSlotsLevels.map((slots, levelIndex) => {
           return (
             <SpellSlotsLevel
@@ -41,12 +41,11 @@ export default function SpellSlots() {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 12,
-  },
-  slotsList: {
-    paddingTop: 24,
+    flex: 1,
   },
   addLevelButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingBottom: 12,
   },
 });
