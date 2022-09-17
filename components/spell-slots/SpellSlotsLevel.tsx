@@ -2,6 +2,7 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import SpellSlot from './SpellSlot';
 
 interface SpellSlotsLevelProps {
+  isEditMode: boolean;
   level: number;
   slots: Array<boolean>;
   toggleSlot: (levelIndex: number, slotIndex: number) => void;
@@ -10,6 +11,7 @@ interface SpellSlotsLevelProps {
 }
 
 export default function SpellSlotsLevel({
+  isEditMode,
   addSlot,
   removeSlot,
   level,
@@ -22,22 +24,24 @@ export default function SpellSlotsLevel({
     <View style={styles.container}>
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>Level {level}</Text>
-        <View style={styles.editButtonsContainer}>
-          <TouchableOpacity
-            accessibilityLabel="Remove a spell slot"
-            style={styles.button}
-            onPress={() => removeSlot(levelIndex)}
-          >
-            <Text style={styles.buttonText}>-</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            accessibilityLabel="Add a spell slot"
-            style={styles.button}
-            onPress={() => addSlot(levelIndex)}
-          >
-            <Text style={styles.buttonText}>+</Text>
-          </TouchableOpacity>
-        </View>
+        {isEditMode && (
+          <View style={styles.editButtonsContainer}>
+            <TouchableOpacity
+              accessibilityLabel="Remove a spell slot"
+              style={styles.button}
+              onPress={() => removeSlot(levelIndex)}
+            >
+              <Text style={styles.buttonText}>-</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              accessibilityLabel="Add a spell slot"
+              style={styles.button}
+              onPress={() => addSlot(levelIndex)}
+            >
+              <Text style={styles.buttonText}>+</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
       <View style={styles.spellSlots}>
         {slots.map((isChecked, slotIndex) => {
@@ -64,8 +68,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headingText: {
-    fontSize: 24,
+    fontSize: 18,
     paddingRight: 12,
+    // fontWeight: 'bold',
   },
   button: {
     paddingHorizontal: 4,

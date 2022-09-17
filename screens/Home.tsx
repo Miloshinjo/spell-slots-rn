@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '700',
+    borderBottomWidth: 1,
   },
 });
