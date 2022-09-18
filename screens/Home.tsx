@@ -6,8 +6,6 @@ import { commonStyles } from '../styles/common';
 export default function Home() {
   return (
     <SafeAreaView style={[commonStyles.androidSafeArea, styles.container]}>
-      <Text style={styles.heading}>5e Spell Slots manager</Text>
-
       <SpellSlots />
     </SafeAreaView>
   );
@@ -18,10 +16,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingVertical: 30,
-  },
-  heading: {
-    fontSize: 20,
-    fontWeight: '700',
-    borderBottomWidth: 1,
   },
 });
