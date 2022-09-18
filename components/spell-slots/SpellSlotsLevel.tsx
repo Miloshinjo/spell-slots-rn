@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import SpellSlot from './SpellSlot';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface SpellSlotsLevelProps {
   isEditMode: boolean;
@@ -22,7 +23,12 @@ export default function SpellSlotsLevel({
 
   return (
     <View style={styles.container}>
-      <View style={styles.headingContainer}>
+      <View
+        style={[
+          styles.headingContainer,
+          isEditMode ? { borderWidth: 1 } : { borderWidth: 0 },
+        ]}
+      >
         <Text style={styles.headingText}>Level {level}</Text>
         {isEditMode && (
           <View style={styles.editButtonsContainer}>
@@ -31,14 +37,14 @@ export default function SpellSlotsLevel({
               style={styles.button}
               onPress={() => removeSlot(levelIndex)}
             >
-              <Text style={styles.buttonText}>-</Text>
+              <Ionicons name="md-remove" size={24} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
               accessibilityLabel="Add a spell slot"
               style={styles.button}
               onPress={() => addSlot(levelIndex)}
             >
-              <Text style={styles.buttonText}>+</Text>
+              <Ionicons name="md-add" size={24} color="white" />
             </TouchableOpacity>
           </View>
         )}
@@ -64,8 +70,13 @@ const styles = StyleSheet.create({
   },
   headingContainer: {
     flexDirection: 'row',
-    paddingBottom: 8,
+    padding: 4,
     justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  editButtonsContainer: {
+    flexDirection: 'row',
   },
   headingText: {
     fontSize: 18,
@@ -74,12 +85,12 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingHorizontal: 4,
-    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
     marginHorizontal: 4,
     width: 40,
+    backgroundColor: '#BE4BDB',
   },
   buttonText: {
     fontSize: 20,
@@ -88,8 +99,5 @@ const styles = StyleSheet.create({
   spellSlots: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-  },
-  editButtonsContainer: {
-    flexDirection: 'row',
   },
 });
