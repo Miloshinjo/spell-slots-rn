@@ -4,7 +4,9 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { colors } from '../../styles/designSystem';
+import { Icon } from 'native-base';
 
 interface SpellSlotProps {
   isChecked: boolean;
@@ -14,7 +16,9 @@ interface SpellSlotProps {
 export default function SpellSlot({ isChecked, onPress }: SpellSlotProps) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      {isChecked ? <Ionicons name="md-close" size={32} color="black" /> : null}
+      {isChecked ? (
+        <Icon size="lg" as={MaterialIcons} name="close" color="secondary.600" />
+      ) : null}
     </TouchableOpacity>
   );
 }

@@ -1,6 +1,8 @@
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import SpellSlot from './SpellSlot';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { colors } from '../../styles/designSystem';
+import { AddIcon, HStack, Icon, IconButton, MinusIcon } from 'native-base';
 
 interface SpellSlotsLevelProps {
   isEditMode: boolean;
@@ -22,31 +24,27 @@ export default function SpellSlotsLevel({
   const levelIndex = level - 1;
 
   return (
-    <View style={styles.container}>
-      <View
-        style={[
-          styles.headingContainer,
-          isEditMode ? { borderWidth: 1 } : { borderWidth: 0 },
-        ]}
-      >
+    <View
+      style={[
+        styles.container,
+        isEditMode ? { borderWidth: 1 } : { borderWidth: 0 },
+      ]}
+    >
+      <View style={[styles.headingContainer]}>
         <Text style={styles.headingText}>Level {level}</Text>
         {isEditMode && (
-          <View style={styles.editButtonsContainer}>
-            <TouchableOpacity
+          <HStack>
+            <IconButton
               accessibilityLabel="Remove a spell slot"
-              style={styles.button}
+              icon={<MinusIcon />}
               onPress={() => removeSlot(levelIndex)}
-            >
-              <Ionicons name="md-remove" size={24} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              accessibilityLabel="Add a spell slot"
-              style={styles.button}
+            />
+            <IconButton
+              accessibilityLabel="Remove a spell slot"
+              icon={<AddIcon />}
               onPress={() => addSlot(levelIndex)}
-            >
-              <Ionicons name="md-add" size={24} color="white" />
-            </TouchableOpacity>
-          </View>
+            />
+          </HStack>
         )}
       </View>
       <View style={styles.spellSlots}>
@@ -66,7 +64,8 @@ export default function SpellSlotsLevel({
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 12,
+    marginBottom: 12,
+    borderStyle: 'dashed',
   },
   headingContainer: {
     flexDirection: 'row',
@@ -75,22 +74,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-  editButtonsContainer: {
-    flexDirection: 'row',
-  },
   headingText: {
     fontSize: 18,
     paddingRight: 12,
-    // fontWeight: 'bold',
-  },
-  button: {
-    paddingHorizontal: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    marginHorizontal: 4,
-    width: 40,
-    backgroundColor: '#BE4BDB',
   },
   buttonText: {
     fontSize: 20,

@@ -1,17 +1,22 @@
 import { useState } from 'react';
-import {
-  Button,
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  Image,
-} from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { View, StyleSheet, Text, Image } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import SpellSlotsLevel from './SpellSlotsLevel';
 import useSpellSlotsState from './useSpellSlotsState';
+import { colors } from '../../styles/designSystem';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  StatusBar,
+  Switch,
+  VStack,
+  ScrollView,
+  Icon,
+} from 'native-base';
 
 export default function SpellSlots() {
   const [isEditMode, setEditMode] = useState(false);
@@ -25,42 +30,44 @@ export default function SpellSlots() {
     removeSlot,
   } = useSpellSlotsState();
 
+  const handleSwitchEditMode = () => {
+    setEditMode(!isEditMode);
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <Box flex="1">
+      <Flex direction="row" justifyContent="space-between" p="4">
         <View style={styles.logoContainer}>
           <Image
             source={require('../../assets/images/logo.png')}
             style={{ height: 40, width: 40 }}
           />
-          <Text style={styles.heading}>Spell Slots</Text>
         </View>
+        <HStack alignItems="center" space={4}>
+          <Text>Edit</Text>
+          <Switch value={isEditMode} onChange={handleSwitchEditMode} />
+        </HStack>
+      </Flex>
 
-        <TouchableOpacity
-          style={[
-            styles.editButton,
-            isEditMode
-              ? {
-                  borderColor: '#BE4BDB',
-                }
-              : {
-                  borderColor: 'transparent',
-                },
-          ]}
-          onPress={() => setEditMode((prevState) => !prevState)}
-        >
-          <Ionicons
-            name="create-outline"
-            size={24}
-            color={isEditMode ? '#BE4BDB' : 'black'}
-          />
-        </TouchableOpacity>
-      </View>
       {isEditMode && (
-        <View style={styles.addLevelButtons}>
-          <Button color="#BE4BDB" title="Remove Level" onPress={removeLevel} />
-          <Button color="#BE4BDB" title="Add Level" onPress={addLevel} />
-        </View>
+        <HStack p="4" justifyContent="space-between">
+          <Button
+            leftIcon={<Icon size="sm" as={MaterialIcons} name="remove" />}
+            colorScheme="black"
+            variant="outline"
+            onPress={removeLevel}
+          >
+            Remove Level
+          </Button>
+          <Button
+            leftIcon={<Icon size="sm" as={MaterialIcons} name="add" />}
+            colorScheme="black"
+            variant="outline"
+            onPress={addLevel}
+          >
+            Add Level
+          </Button>
+        </HStack>
       )}
 
       {spellSlotsLevels.length === 0 ? (
@@ -73,16 +80,16 @@ export default function SpellSlots() {
             }}
           >
             <Button
-              color="#BE4BDB"
-              title="Start Editing"
               onPress={() => {
                 setEditMode(true);
               }}
-            />
+            >
+              Start Editing
+            </Button>
           </View>
         )
       ) : (
-        <ScrollView>
+        <ScrollView px="4" showsVerticalScrollIndicator={false} pb="24">
           {spellSlotsLevels.map((slots, levelIndex) => {
             return (
               <SpellSlotsLevel
@@ -98,7 +105,7 @@ export default function SpellSlots() {
           })}
         </ScrollView>
       )}
-    </View>
+    </Box>
   );
 }
 
@@ -106,26 +113,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
   logoContainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
   },
   heading: {
-    fontSize: 20,
     marginLeft: 8,
-  },
-  addLevelButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingBottom: 12,
-  },
-  editButton: {
-    alignSelf: 'center',
-    padding: 6,
   },
 });
