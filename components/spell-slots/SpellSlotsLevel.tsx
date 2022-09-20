@@ -41,7 +41,7 @@ export default function SpellSlotsLevel({
         mb="1"
       >
         <Heading fontSize="lg" py="2">
-          Level {level}
+          {isEditMode && `(${slots.length})`} Level {level}
         </Heading>
         {isEditMode && (
           <HStack>

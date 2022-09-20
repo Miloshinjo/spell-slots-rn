@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, GestureResponderEvent } from 'react-native';
+import { Animated, Easing, GestureResponderEvent } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { Icon, IconButton } from 'native-base';
@@ -22,7 +22,7 @@ export default function SpellSlot({
     // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 150,
+      duration: 100,
       useNativeDriver: true,
     }).start();
   };
@@ -31,7 +31,7 @@ export default function SpellSlot({
     // Will change fadeAnim value to 0 in 3 seconds
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 150,
+      duration: 100,
       useNativeDriver: true,
     }).start();
   };
@@ -39,7 +39,8 @@ export default function SpellSlot({
   const shrink = () => {
     Animated.timing(scaleAnim, {
       toValue: 0,
-      duration: 150,
+      duration: 100,
+      easing: Easing.ease,
       useNativeDriver: true,
     }).start();
   };
@@ -47,7 +48,8 @@ export default function SpellSlot({
   const enlarge = () => {
     Animated.timing(scaleAnim, {
       toValue: 1,
-      duration: 150,
+      duration: 100,
+      easing: Easing.ease,
       useNativeDriver: true,
     }).start();
   };
@@ -68,9 +70,11 @@ export default function SpellSlot({
       mr="2"
       width={10}
       height={10}
-      variant="outline"
-      colorScheme="black"
+      variant="subtle"
+      colorScheme="gray"
       onPress={onPress}
+      borderWidth="1"
+      borderColor={isDisabled ? 'black' : 'black'}
       icon={
         <Animated.View
           style={{
