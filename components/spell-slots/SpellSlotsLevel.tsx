@@ -1,8 +1,17 @@
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import SpellSlot from './SpellSlot';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { colors } from '../../styles/designSystem';
-import { AddIcon, HStack, Icon, IconButton, MinusIcon } from 'native-base';
+import { MaterialIcons } from '@expo/vector-icons';
+
+import {
+  AddIcon,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Icon,
+  IconButton,
+  MinusIcon,
+} from 'native-base';
 
 interface SpellSlotsLevelProps {
   isEditMode: boolean;
@@ -24,66 +33,52 @@ export default function SpellSlotsLevel({
   const levelIndex = level - 1;
 
   return (
-    <View
-      style={[
-        styles.container,
-        isEditMode ? { borderWidth: 1 } : { borderWidth: 0 },
-      ]}
-    >
-      <View style={[styles.headingContainer]}>
-        <Text style={styles.headingText}>Level {level}</Text>
+    <Box mb="4">
+      <Flex
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb="1"
+      >
+        <Heading fontSize="lg" py="2">
+          Level {level}
+        </Heading>
         {isEditMode && (
           <HStack>
-            <IconButton
-              accessibilityLabel="Remove a spell slot"
-              icon={<MinusIcon />}
+            <Button
+              leftIcon={<Icon size="sm" as={MaterialIcons} name="remove" />}
+              colorScheme="black"
+              variant="outline"
+              size="sm"
               onPress={() => removeSlot(levelIndex)}
-            />
-            <IconButton
-              accessibilityLabel="Remove a spell slot"
-              icon={<AddIcon />}
+              mr="2"
+            >
+              Remove slot
+            </Button>
+            <Button
+              leftIcon={<Icon size="sm" as={MaterialIcons} name="add" />}
+              colorScheme="black"
+              variant="outline"
+              size="sm"
               onPress={() => addSlot(levelIndex)}
-            />
+            >
+              Add slot
+            </Button>
           </HStack>
         )}
-      </View>
-      <View style={styles.spellSlots}>
+      </Flex>
+      <Flex direction="row" wrap="wrap">
         {slots.map((isChecked, slotIndex) => {
           return (
             <SpellSlot
               key={slotIndex}
               isChecked={isChecked}
               onPress={() => toggleSlot(levelIndex, slotIndex)}
+              isDisabled={isEditMode}
             />
           );
         })}
-      </View>
-    </View>
+      </Flex>
+    </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 12,
-    borderStyle: 'dashed',
-  },
-  headingContainer: {
-    flexDirection: 'row',
-    padding: 4,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  headingText: {
-    fontSize: 18,
-    paddingRight: 12,
-  },
-  buttonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  spellSlots: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-});

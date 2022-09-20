@@ -1,12 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SpellSlotsState } from './useSpellSlotsState';
 
 export default function useLoadState(
   setState: (storageState: SpellSlotsState) => void
 ) {
+  const [isLoading, setLoading] = useState(false);
+
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       try {
         const jsonValue = await AsyncStorage.getItem('@spellSlotsState');
 
@@ -21,9 +24,13 @@ export default function useLoadState(
         // error reading value
         console.error('Error reading AsyncStorage value');
         return null;
+      } finally {
+        setLoading(false);
       }
     };
 
     getData();
   }, []);
+
+  return isLoading;
 }

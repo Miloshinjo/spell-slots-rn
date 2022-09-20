@@ -1,21 +1,20 @@
 import { useState } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { Switch as ReactNativeSwitch } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import SpellSlotsLevel from './SpellSlotsLevel';
 import useSpellSlotsState from './useSpellSlotsState';
-import { colors } from '../../styles/designSystem';
+
 import {
+  Text,
   Box,
   Button,
   Flex,
-  Heading,
   HStack,
-  StatusBar,
-  Switch,
-  VStack,
   ScrollView,
   Icon,
+  Center,
+  Image,
 } from 'native-base';
 
 export default function SpellSlots() {
@@ -24,6 +23,7 @@ export default function SpellSlots() {
   const {
     spellSlotsLevels,
     addLevel,
+    isLoadingFromStorage,
     removeLevel,
     toggleSlot,
     addSlot,
@@ -31,21 +31,30 @@ export default function SpellSlots() {
   } = useSpellSlotsState();
 
   const handleSwitchEditMode = () => {
-    setEditMode(!isEditMode);
+    setEditMode((p) => !p);
   };
 
   return (
     <Box flex="1">
       <Flex direction="row" justifyContent="space-between" p="4">
-        <View style={styles.logoContainer}>
+        <Box>
           <Image
             source={require('../../assets/images/logo.png')}
-            style={{ height: 40, width: 40 }}
+            style={{ height: 50, width: 50 }}
+            alt="Logo"
           />
-        </View>
+        </Box>
         <HStack alignItems="center" space={4}>
           <Text>Edit</Text>
-          <Switch value={isEditMode} onChange={handleSwitchEditMode} />
+          <ReactNativeSwitch
+            trackColor={{
+              true: '#67E8F9',
+              false: '#ddd',
+            }}
+            thumbColor="#404040"
+            value={isEditMode}
+            onValueChange={handleSwitchEditMode}
+          />
         </HStack>
       </Flex>
 
@@ -71,14 +80,9 @@ export default function SpellSlots() {
       )}
 
       {spellSlotsLevels.length === 0 ? (
-        !isEditMode && (
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              flex: 1,
-            }}
-          >
+        !isEditMode &&
+        !isLoadingFromStorage && (
+          <Center flex="1">
             <Button
               onPress={() => {
                 setEditMode(true);
@@ -86,7 +90,7 @@ export default function SpellSlots() {
             >
               Start Editing
             </Button>
-          </View>
+          </Center>
         )
       ) : (
         <ScrollView px="4" showsVerticalScrollIndicator={false} pb="24">
@@ -108,16 +112,3 @@ export default function SpellSlots() {
     </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-  },
-  heading: {
-    marginLeft: 8,
-  },
-});

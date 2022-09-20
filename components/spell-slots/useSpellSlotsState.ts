@@ -58,7 +58,7 @@ export default function useSpellSlotsState() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // Persist state to AsyncStorage
-  useLoadState((storageState: SpellSlotsState) => {
+  const isLoadingFromStorage = useLoadState((storageState: SpellSlotsState) => {
     dispatch({
       type: 'LOAD_FROM_STORAGE',
       payload: {
@@ -124,5 +124,6 @@ export default function useSpellSlotsState() {
     spellSlotsLevels: state,
     addSlot,
     removeSlot,
+    isLoadingFromStorage,
   };
 }
