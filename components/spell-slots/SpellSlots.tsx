@@ -37,13 +37,14 @@ export default function SpellSlots() {
   return (
     <Box flex="1">
       <Flex direction="row" justifyContent="space-between" p="4">
-        <Box>
-          <Image
-            source={require('../../assets/images/logo.png')}
-            style={{ height: 50, width: 50 }}
-            alt="Logo"
-          />
-        </Box>
+        <Image
+          source={require('../../assets/images/logo-full.png')}
+          width="40"
+          height="20"
+          alt="Logo"
+          resizeMode="contain"
+        />
+
         <HStack alignItems="center" space={4}>
           <Text>Edit</Text>
           <ReactNativeSwitch
