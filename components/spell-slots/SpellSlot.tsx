@@ -15,55 +15,6 @@ export default function SpellSlot({
   isDisabled,
   onPress,
 }: SpellSlotProps) {
-  const fadeAnim = useRef(new Animated.Value(isChecked ? 1 : 0)).current;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-
-  const fadeIn = () => {
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 100,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const fadeOut = () => {
-    // Will change fadeAnim value to 0 in 3 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 100,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const shrink = () => {
-    Animated.timing(scaleAnim, {
-      toValue: 0,
-      duration: 100,
-      easing: Easing.ease,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const enlarge = () => {
-    Animated.timing(scaleAnim, {
-      toValue: 1,
-      duration: 100,
-      easing: Easing.ease,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  useEffect(() => {
-    if (isChecked) {
-      enlarge();
-      fadeIn();
-    } else {
-      shrink();
-      fadeOut();
-    }
-  }, [isChecked]);
-
   return (
     <IconButton
       mb="2"
@@ -74,19 +25,14 @@ export default function SpellSlot({
       colorScheme="gray"
       onPress={onPress}
       borderWidth="1"
-      borderColor={isDisabled ? 'black' : 'black'}
+      borderColor="black"
       icon={
-        <Animated.View
-          style={{
-            opacity: fadeAnim,
-            transform: [{ scale: scaleAnim }],
-          }}
-        >
+        isChecked ? (
           <Icon size="lg" as={MaterialIcons} name="close" />
-        </Animated.View>
+        ) : undefined
       }
       disabled={isDisabled}
-      opacity={isDisabled ? '.2' : '1'}
+      opacity={isDisabled ? '.3' : '1'}
     />
   );
 }

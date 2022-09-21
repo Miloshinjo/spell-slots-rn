@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Switch as ReactNativeSwitch } from 'react-native';
+
 import { MaterialIcons } from '@expo/vector-icons';
 
 import SpellSlotsLevel from './SpellSlotsLevel';
@@ -16,6 +16,7 @@ import {
   Center,
   Image,
 } from 'native-base';
+import ClearSlots from './ClearSlots';
 
 export default function SpellSlots() {
   const [isEditMode, setEditMode] = useState(false);
@@ -23,20 +24,18 @@ export default function SpellSlots() {
   const {
     spellSlotsLevels,
     addLevel,
+    isFresh,
     isLoadingFromStorage,
     removeLevel,
     toggleSlot,
     addSlot,
     removeSlot,
+    clearSlots,
   } = useSpellSlotsState();
-
-  const handleSwitchEditMode = () => {
-    setEditMode((p) => !p);
-  };
 
   return (
     <Box flex="1">
-      <Flex direction="row" justifyContent="space-between" p="4">
+      <Flex direction="row" justifyContent="space-between" px="4">
         <Image
           source={require('../../assets/images/logo-full.png')}
           width="40"
@@ -44,19 +43,6 @@ export default function SpellSlots() {
           alt="Logo"
           resizeMode="contain"
         />
-
-        <HStack alignItems="center" space={4}>
-          <Text>Edit</Text>
-          <ReactNativeSwitch
-            trackColor={{
-              true: '#67E8F9',
-              false: '#ddd',
-            }}
-            thumbColor="#404040"
-            value={isEditMode}
-            onValueChange={handleSwitchEditMode}
-          />
-        </HStack>
       </Flex>
 
       {isEditMode && (
@@ -94,22 +80,45 @@ export default function SpellSlots() {
           </Center>
         )
       ) : (
-        <ScrollView px="4" showsVerticalScrollIndicator={false} pb="24">
-          {spellSlotsLevels.map((slots, levelIndex) => {
-            return (
-              <SpellSlotsLevel
-                isEditMode={isEditMode}
-                addSlot={addSlot}
-                removeSlot={removeSlot}
-                key={levelIndex}
-                toggleSlot={toggleSlot}
-                level={levelIndex + 1}
-                slots={slots}
-              />
-            );
-          })}
-        </ScrollView>
+        <>
+          <ScrollView px="4" showsVerticalScrollIndicator={false} pb="24">
+            {spellSlotsLevels.map((slots, levelIndex) => {
+              return (
+                <SpellSlotsLevel
+                  isEditMode={isEditMode}
+                  addSlot={addSlot}
+                  removeSlot={removeSlot}
+                  key={levelIndex}
+                  toggleSlot={toggleSlot}
+                  level={levelIndex + 1}
+                  slots={slots}
+                />
+              );
+            })}
+          </ScrollView>
+        </>
       )}
+      <Flex
+        borderTopWidth={1}
+        borderTopColor="gray.300"
+        flexDirection="row"
+        mt="auto"
+      >
+        <ClearSlots isDisabled={isFresh} clearSlots={clearSlots} />
+        <Button
+          variant={isEditMode ? 'solid' : 'subtle'}
+          colorScheme={isEditMode ? 'primary' : 'gray'}
+          flex="1"
+          alignItems="center"
+          borderRadius="none"
+          py="4"
+          onPress={() => setEditMode((p) => !p)}
+        >
+          {isEditMode ? 'Save' : 'Edit'}
+        </Button>
+      </Flex>
     </Box>
   );
 }
+
+[[false, false, true], [true, true], [false]];

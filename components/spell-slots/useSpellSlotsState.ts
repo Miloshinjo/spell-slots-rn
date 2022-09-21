@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useReducer } from 'react';
 import useLoadState from './useLoadState';
 import usePersistState from './usePersistState';
 
@@ -11,7 +11,8 @@ type SpellSlotsAction = {
     | 'REMOVE_LEVEL'
     | 'ADD_SLOT'
     | 'REMOVE_SLOT'
-    | 'LOAD_FROM_STORAGE';
+    | 'LOAD_FROM_STORAGE'
+    | 'CLEAR_SLOTS';
   payload?: any;
 };
 
@@ -47,6 +48,8 @@ function reducer(state: SpellSlotsState, action: SpellSlotsAction) {
 
         return level.slice(0, -1);
       });
+    case 'CLEAR_SLOTS':
+      return state.map((level) => level.map(() => false));
     case 'LOAD_FROM_STORAGE':
       return action.payload.storageState as SpellSlotsState;
     default:
@@ -117,13 +120,23 @@ export default function useSpellSlotsState() {
     [dispatch]
   );
 
+  const clearSlots = useCallback(() => {
+    dispatch({
+      type: 'CLEAR_SLOTS',
+    });
+  }, [dispatch]);
+
+  const isFresh = !state.find((level) => level.find((slot) => slot === true));
+
   return {
     addLevel,
+    isFresh,
+    isLoadingFromStorage,
     removeLevel,
     toggleSlot,
     spellSlotsLevels: state,
     addSlot,
     removeSlot,
-    isLoadingFromStorage,
+    clearSlots,
   };
 }
