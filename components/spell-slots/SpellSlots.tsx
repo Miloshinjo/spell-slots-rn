@@ -34,6 +34,8 @@ export default function SpellSlots() {
     clearSlots,
   } = useSpellSlotsState();
 
+  const isAtMaxLevel = spellSlotsLevels.size >= MAX_LEVEL_LIMIT;
+
   return (
     <Box flex="1">
       <Flex direction="row" justifyContent="space-between" px="4">
@@ -56,14 +58,20 @@ export default function SpellSlots() {
           >
             Remove Level
           </Button>
+
           <Button
-            leftIcon={<Icon size="sm" as={MaterialIcons} name="add" />}
+            leftIcon={
+              isAtMaxLevel ? undefined : (
+                <Icon size="sm" as={MaterialIcons} name="add" />
+              )
+            }
             colorScheme="black"
             variant="outline"
             onPress={addLevel}
-            disabled={spellSlotsLevels.size >= MAX_LEVEL_LIMIT}
+            disabled={isAtMaxLevel}
+            opacity={isAtMaxLevel ? '0.3' : '1'}
           >
-            Add Level
+            {isAtMaxLevel ? 'Max level reached' : 'Add Level'}
           </Button>
         </HStack>
       )}
@@ -111,6 +119,7 @@ export default function SpellSlots() {
           variant={isEditMode ? 'solid' : 'subtle'}
           colorScheme={isEditMode ? 'primary' : 'gray'}
           flex="1"
+          size="lg"
           alignItems="center"
           borderRadius="none"
           py="4"

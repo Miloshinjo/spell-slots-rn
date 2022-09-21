@@ -23,6 +23,7 @@ export default function ClearSlots({
               variant="subtle"
               colorScheme="gray"
               alignItems="center"
+              size="lg"
               py="4"
               borderRightWidth="1"
               borderRightColor="gray.300"

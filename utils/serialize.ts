@@ -5,11 +5,11 @@ export function serializeState(state: SpellSlotsState): string {
 
   return jsonValue;
 }
-export function deserializeState(jsonValue: string): SpellSlotsState {
+export function deserializeState(jsonValue: string): SpellSlotsState | null {
   const parsedValue = JSON.parse(jsonValue);
 
   if (!parsedValue) {
-    return new Map();
+    return null;
   }
   return new Map(parsedValue);
 }

@@ -18,7 +18,11 @@ export default function useLoadState(
           return;
         }
 
-        const data: SpellSlotsState = deserializeState(jsonValue);
+        const data = deserializeState(jsonValue);
+
+        if (data === null) {
+          return;
+        }
 
         setState(data);
       } catch (e) {
