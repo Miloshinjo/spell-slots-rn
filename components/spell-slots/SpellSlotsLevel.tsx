@@ -1,25 +1,15 @@
 import SpellSlot from './SpellSlot';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import {
-  AddIcon,
-  Box,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Icon,
-  IconButton,
-  MinusIcon,
-} from 'native-base';
+import { Box, Button, Flex, Heading, HStack, Icon } from 'native-base';
 
 interface SpellSlotsLevelProps {
   isEditMode: boolean;
   level: number;
   slots: Array<boolean>;
   toggleSlot: (levelIndex: number, slotIndex: number) => void;
-  addSlot: (levelIndex: number) => void;
-  removeSlot: (levelIndex: number) => void;
+  addSlot: (level: number) => void;
+  removeSlot: (level: number) => void;
 }
 
 export default function SpellSlotsLevel({
@@ -30,8 +20,6 @@ export default function SpellSlotsLevel({
   slots,
   toggleSlot,
 }: SpellSlotsLevelProps) {
-  const levelIndex = level - 1;
-
   return (
     <Box mb="4">
       <Flex
@@ -50,7 +38,7 @@ export default function SpellSlotsLevel({
               colorScheme="black"
               variant="outline"
               size="sm"
-              onPress={() => removeSlot(levelIndex)}
+              onPress={() => removeSlot(level)}
               mr="2"
             >
               Remove slot
@@ -60,7 +48,7 @@ export default function SpellSlotsLevel({
               colorScheme="black"
               variant="outline"
               size="sm"
-              onPress={() => addSlot(levelIndex)}
+              onPress={() => addSlot(level)}
             >
               Add slot
             </Button>
@@ -73,7 +61,7 @@ export default function SpellSlotsLevel({
             <SpellSlot
               key={slotIndex}
               isChecked={isChecked}
-              onPress={() => toggleSlot(levelIndex, slotIndex)}
+              onPress={() => toggleSlot(level, slotIndex)}
               isDisabled={isEditMode}
             />
           );

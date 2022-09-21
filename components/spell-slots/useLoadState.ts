@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
+import { deserializeState } from '../../utils/serialize';
 import { SpellSlotsState } from './useSpellSlotsState';
 
 export default function useLoadState(
@@ -17,7 +18,9 @@ export default function useLoadState(
           return;
         }
 
-        const data: SpellSlotsState = JSON.parse(jsonValue);
+        const data: SpellSlotsState = deserializeState(jsonValue);
+
+        console.log({ data });
 
         setState(data);
       } catch (e) {

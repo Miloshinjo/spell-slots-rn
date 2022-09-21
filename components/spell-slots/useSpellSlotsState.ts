@@ -2,7 +2,9 @@ import { useCallback, useReducer } from 'react';
 import useLoadState from './useLoadState';
 import usePersistState from './usePersistState';
 
-export type SpellSlotsState = Array<Array<boolean>>;
+import { MAX_LEVEL_LIMIT } from '../../constants/preferences';
+
+export type SpellSlotsState = Map<number, Array<boolean>>;
 
 type SpellSlotsAction = {
   type:
@@ -16,40 +18,80 @@ type SpellSlotsAction = {
   payload?: any;
 };
 
-const initialState: SpellSlotsState = [];
+const initialState: SpellSlotsState = new Map();
 
 function reducer(state: SpellSlotsState, action: SpellSlotsAction) {
   switch (action.type) {
-    case 'TOGGLE_SLOT':
-      const stateCopy = [...state];
+    case 'TOGGLE_SLOT': {
+      const mapCopy = new Map(state);
 
-      stateCopy[action.payload.levelIndex][action.payload.slotIndex] =
-        !stateCopy[action.payload.levelIndex][action.payload.slotIndex];
+      let level = mapCopy.get(action.payload.level);
 
-      return stateCopy;
+      if (level === undefined) {
+        console.warn('Spell level not found in state.');
+        return state;
+      }
 
+      const { slotIndex } = action.payload;
+
+      level[slotIndex] = !level[slotIndex];
+
+      mapCopy.set(action.payload.level, level);
+
+      return new Map(mapCopy);
+    }
     case 'ADD_LEVEL':
-      return [...state, [false]];
-    case 'REMOVE_LEVEL':
-      return state.slice(0, -1);
-    case 'ADD_SLOT':
-      return state.map((level, levelIndex) => {
-        if (levelIndex !== action.payload.levelIndex) {
-          return level;
-        }
+      return new Map([...state, [state.size + 1, [false]]]);
 
-        return [...level, false];
-      });
-    case 'REMOVE_SLOT':
-      return state.map((level, levelIndex) => {
-        if (levelIndex !== action.payload.levelIndex || level.length === 1) {
-          return level;
-        }
+    case 'REMOVE_LEVEL': {
+      const mapCopy = new Map(state);
 
-        return level.slice(0, -1);
+      mapCopy.delete(mapCopy.size);
+
+      return new Map(mapCopy);
+    }
+    case 'ADD_SLOT': {
+      const mapCopy = new Map(state);
+
+      const level = mapCopy.get(action.payload.level);
+
+      if (level === undefined) {
+        console.warn('Spell level not found in state.');
+        return state;
+      }
+
+      mapCopy.set(action.payload.level, [...level, false]);
+
+      return new Map(mapCopy);
+    }
+    case 'REMOVE_SLOT': {
+      const mapCopy = new Map(state);
+
+      const level = mapCopy.get(action.payload.level);
+
+      if (level === undefined) {
+        console.warn('Spell level not found in state.');
+        return state;
+      }
+
+      level.pop();
+
+      mapCopy.set(action.payload.level, level);
+
+      return new Map(mapCopy);
+    }
+    case 'CLEAR_SLOTS': {
+      const mapCopy = new Map(state);
+
+      mapCopy.forEach((value, key) => {
+        mapCopy.set(
+          key,
+          value.map(() => false)
+        );
       });
-    case 'CLEAR_SLOTS':
-      return state.map((level) => level.map(() => false));
+
+      return new Map(mapCopy);
+    }
     case 'LOAD_FROM_STORAGE':
       return action.payload.storageState as SpellSlotsState;
     default:
@@ -84,11 +126,11 @@ export default function useSpellSlotsState() {
   }, [dispatch]);
 
   const toggleSlot = useCallback(
-    (levelIndex: number, slotIndex: number) => {
+    (level: number, slotIndex: number) => {
       dispatch({
         type: 'TOGGLE_SLOT',
         payload: {
-          levelIndex,
+          level,
           slotIndex,
         },
       });
@@ -97,11 +139,11 @@ export default function useSpellSlotsState() {
   );
 
   const addSlot = useCallback(
-    (levelIndex: number) => {
+    (level: number) => {
       dispatch({
         type: 'ADD_SLOT',
         payload: {
-          levelIndex,
+          level,
         },
       });
     },
@@ -109,11 +151,11 @@ export default function useSpellSlotsState() {
   );
 
   const removeSlot = useCallback(
-    (levelIndex: number) => {
+    (level: number) => {
       dispatch({
         type: 'REMOVE_SLOT',
         payload: {
-          levelIndex,
+          level,
         },
       });
     },
@@ -126,7 +168,8 @@ export default function useSpellSlotsState() {
     });
   }, [dispatch]);
 
-  const isFresh = !state.find((level) => level.find((slot) => slot === true));
+  const isFresh =
+    [...state.values()].flat().find((v) => v === true) === undefined;
 
   return {
     addLevel,

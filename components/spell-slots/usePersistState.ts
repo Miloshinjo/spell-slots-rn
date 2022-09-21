@@ -2,10 +2,11 @@ import { useEffect, useMemo } from 'react';
 import type { SpellSlotsState } from './useSpellSlotsState';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useDebounce from '../../hooks/useDebounce';
+import { serializeState } from '../../utils/serialize';
 
-const storeData = async (key: string, value: SpellSlotsState) => {
+const storeData = async (key: string, state: SpellSlotsState) => {
   try {
-    const jsonValue = JSON.stringify(value);
+    const jsonValue = serializeState(state);
 
     await AsyncStorage.setItem(key, jsonValue);
   } catch (e) {

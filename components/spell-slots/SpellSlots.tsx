@@ -17,6 +17,7 @@ import {
   Image,
 } from 'native-base';
 import ClearSlots from './ClearSlots';
+import { MAX_LEVEL_LIMIT } from '../../constants/preferences';
 
 export default function SpellSlots() {
   const [isEditMode, setEditMode] = useState(false);
@@ -60,13 +61,14 @@ export default function SpellSlots() {
             colorScheme="black"
             variant="outline"
             onPress={addLevel}
+            disabled={spellSlotsLevels.size >= MAX_LEVEL_LIMIT}
           >
             Add Level
           </Button>
         </HStack>
       )}
 
-      {spellSlotsLevels.length === 0 ? (
+      {spellSlotsLevels.size === 0 ? (
         !isEditMode &&
         !isLoadingFromStorage && (
           <Center flex="1">
@@ -82,15 +84,15 @@ export default function SpellSlots() {
       ) : (
         <>
           <ScrollView px="4" showsVerticalScrollIndicator={false} pb="24">
-            {spellSlotsLevels.map((slots, levelIndex) => {
+            {Array.from(spellSlotsLevels).map(([level, slots]) => {
               return (
                 <SpellSlotsLevel
                   isEditMode={isEditMode}
                   addSlot={addSlot}
                   removeSlot={removeSlot}
-                  key={levelIndex}
+                  key={level}
                   toggleSlot={toggleSlot}
-                  level={levelIndex + 1}
+                  level={level}
                   slots={slots}
                 />
               );
