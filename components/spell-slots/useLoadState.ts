@@ -20,8 +20,6 @@ export default function useLoadState(
 
         const data: SpellSlotsState = deserializeState(jsonValue);
 
-        console.log({ data });
-
         setState(data);
       } catch (e) {
         // error reading value
