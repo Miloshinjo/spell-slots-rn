@@ -14,7 +14,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.miloshinjo.spellslot"
@@ -26,10 +28,9 @@
       },
       "package": "com.miloshinjo.spellslot"
     },
-
     "extra": {
       "eas": {
-        "projectId": "2a8b95d5-bc1b-4275-9c05-768cdca9b267"
+        "projectId": "1c83b5eb-6088-4a47-b563-ac9cabfbfeed"
       }
     }
   }
