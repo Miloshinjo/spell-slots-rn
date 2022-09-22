@@ -15,14 +15,14 @@ import {
 import ClearSlots from './ClearSlots';
 import { MAX_LEVEL_LIMIT } from '../../constants/preferences';
 
-import useSlotsStore from './useStore';
+import useSlotsStore from './useSlotsStore';
 import SpellSlotsLevel from './SpellSlotsLevel';
 
 export default function SpellSlots() {
   const [isEditMode, setEditMode] = useState(false);
 
-  const addLevelZustand = useSlotsStore((state) => state.addLevel);
-  const removeLevelZustand = useSlotsStore((state) => state.removeLevel);
+  const addLevel = useSlotsStore((state) => state.addLevel);
+  const removeLevel = useSlotsStore((state) => state.removeLevel);
   const numberOfLevels = useSlotsStore((state) => state.levels.length);
 
   const isAtMaxLevel = numberOfLevels >= MAX_LEVEL_LIMIT;
@@ -45,7 +45,7 @@ export default function SpellSlots() {
             leftIcon={<Icon size="sm" as={MaterialIcons} name="remove" />}
             colorScheme="black"
             variant="outline"
-            onPress={removeLevelZustand}
+            onPress={removeLevel}
           >
             Remove Level
           </Button>
@@ -58,7 +58,7 @@ export default function SpellSlots() {
             }
             colorScheme="black"
             variant="outline"
-            onPress={addLevelZustand}
+            onPress={addLevel}
             disabled={isAtMaxLevel}
             opacity={isAtMaxLevel ? '0.3' : '1'}
           >

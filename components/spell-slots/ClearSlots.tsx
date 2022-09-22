@@ -1,6 +1,6 @@
 import { Box, Button, Popover, Text } from 'native-base';
 import { useState } from 'react';
-import useSlotsStore from './useStore';
+import useSlotsStore from './useSlotsStore';
 
 export default function ClearSlots() {
   const [isOpen, setOpen] = useState(false);
@@ -41,6 +41,7 @@ export default function ClearSlots() {
         <Popover.Content accessibilityLabel="Clear all slots" w="56">
           <Popover.Arrow />
           <Popover.CloseButton
+            accessibilityLabel="Close popup"
             onPress={() => {
               setOpen(false);
             }}

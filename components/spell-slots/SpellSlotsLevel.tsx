@@ -1,9 +1,11 @@
+import shallow from 'zustand/shallow';
+
 import SpellSlot from './SpellSlot';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { Box, Button, Flex, Heading, HStack, Icon, Text } from 'native-base';
-import useSlotsStore from './useStore';
-import { memo } from 'react';
+import { Box, Button, Flex, Heading, HStack, Icon } from 'native-base';
+import useSlotsStore from './useSlotsStore';
+
 import { MAX_SLOTS_LIMIT } from '../../constants/preferences';
 
 interface SpellSlotsLevelProps {
@@ -12,10 +14,9 @@ interface SpellSlotsLevelProps {
 }
 
 function SpellSlotsLevel({ isEditMode, levelIndex }: SpellSlotsLevelProps) {
-  const slots = useSlotsStore((state) => state.levels[levelIndex]);
+  const slots = useSlotsStore((state) => state.levels[levelIndex], shallow);
   const addSlot = useSlotsStore((state) => state.addSlot);
   const removeSlot = useSlotsStore((state) => state.removeSlot);
-  const toggleSlot = useSlotsStore((state) => state.toggleSlot);
 
   const handleAddSlot = () => {
     addSlot(levelIndex);
@@ -69,14 +70,12 @@ function SpellSlotsLevel({ isEditMode, levelIndex }: SpellSlotsLevelProps) {
       </Flex>
       <Flex direction="row" wrap="wrap">
         {slots.map((isChecked, slotIndex) => {
-          const handleToggleSlot = () => {
-            toggleSlot(levelIndex, slotIndex);
-          };
           return (
             <SpellSlot
               key={slotIndex}
               isChecked={isChecked}
-              onPress={handleToggleSlot}
+              levelIndex={levelIndex}
+              slotIndex={slotIndex}
               isDisabled={isEditMode}
             />
           );
@@ -86,4 +85,4 @@ function SpellSlotsLevel({ isEditMode, levelIndex }: SpellSlotsLevelProps) {
   );
 }
 
-export default memo(SpellSlotsLevel);
+export default SpellSlotsLevel;

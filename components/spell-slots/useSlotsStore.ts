@@ -7,12 +7,12 @@ import { MAX_LEVEL_LIMIT, MAX_SLOTS_LIMIT } from '../../constants/preferences';
 export interface SlotsState {
   levels: boolean[][];
   addLevel: () => void;
-  removeLevel: () => void;
-  toggleSlot: (levelIndex: number, slotIndex: number) => void;
   addSlot: (levelIndex: number) => void;
+  clearSlots: () => void;
+  removeLevel: () => void;
   removeSlot: (levelIndex: number) => void;
   setLevels: (levels: boolean[][]) => void;
-  clearSlots: () => void;
+  toggleSlot: (levelIndex: number, slotIndex: number) => void;
 }
 
 const useSlotsStore = create<SlotsState>()(
