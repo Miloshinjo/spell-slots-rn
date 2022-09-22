@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import { Animated, Easing, GestureResponderEvent } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -10,11 +10,7 @@ interface SpellSlotProps {
   onPress: ((event: GestureResponderEvent) => void) | undefined;
 }
 
-export default function SpellSlot({
-  isChecked,
-  isDisabled,
-  onPress,
-}: SpellSlotProps) {
+function SpellSlot({ isChecked, isDisabled, onPress }: SpellSlotProps) {
   return (
     <IconButton
       mb="2"
@@ -36,3 +32,5 @@ export default function SpellSlot({
     />
   );
 }
+
+export default memo(SpellSlot);

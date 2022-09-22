@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+import { Provider } from 'jotai';
 import { extendTheme, NativeBaseProvider } from 'native-base';
 
 import Home from './screens/Home';
@@ -25,6 +26,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
       <Home />
+
       <StatusBar style="auto" />
     </NativeBaseProvider>
   );
