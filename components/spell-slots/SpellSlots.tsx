@@ -118,5 +118,3 @@ export default function SpellSlots() {
     </Box>
   );
 }
-
-[[false, false, true], [true, true], [false]];
