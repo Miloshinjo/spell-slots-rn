@@ -2,6 +2,7 @@ import create from 'zustand';
 import produce from 'immer';
 import { persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MAX_LEVEL_LIMIT, MAX_SLOTS_LIMIT } from '../../constants/preferences';
 
 export interface SlotsState {
   levels: boolean[][];
@@ -21,6 +22,10 @@ const useSlotsStore = create<SlotsState>()(
       addLevel: () =>
         set(
           produce((state: SlotsState) => {
+            if (state.levels.length > MAX_LEVEL_LIMIT) {
+              return;
+            }
+
             state.levels.push([false]);
           })
         ),
@@ -41,6 +46,10 @@ const useSlotsStore = create<SlotsState>()(
       addSlot: (levelIndex) => {
         set(
           produce((state: SlotsState) => {
+            if (state.levels[levelIndex].length >= MAX_SLOTS_LIMIT) {
+              return;
+            }
+
             state.levels[levelIndex].push(false);
           })
         );
@@ -48,6 +57,10 @@ const useSlotsStore = create<SlotsState>()(
       removeSlot: (levelIndex) => {
         set(
           produce((state: SlotsState) => {
+            if (state.levels[levelIndex].length <= 1) {
+              return;
+            }
+
             state.levels[levelIndex].pop();
           })
         );

@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Box, Button, Flex, Heading, HStack, Icon, Text } from 'native-base';
 import useSlotsStore from './useStore';
 import { memo } from 'react';
+import { MAX_SLOTS_LIMIT } from '../../constants/preferences';
 
 interface SpellSlotsLevelProps {
   isEditMode: boolean;
@@ -23,6 +24,9 @@ function SpellSlotsLevel({ isEditMode, levelIndex }: SpellSlotsLevelProps) {
   const handleRemoveSlot = () => {
     removeSlot(levelIndex);
   };
+
+  const isAddDisabled = slots.length >= MAX_SLOTS_LIMIT;
+  const isRemoveDisabled = slots.length <= 1;
 
   return (
     <Box mb="4">
@@ -44,8 +48,10 @@ function SpellSlotsLevel({ isEditMode, levelIndex }: SpellSlotsLevelProps) {
               size="sm"
               onPress={handleRemoveSlot}
               mr="2"
+              disabled={isRemoveDisabled}
+              opacity={isRemoveDisabled ? '0.3' : '1'}
             >
-              Remove slot
+              {isRemoveDisabled ? 'Min ' : 'Remove slot'}
             </Button>
             <Button
               leftIcon={<Icon size="sm" as={MaterialIcons} name="add" />}
@@ -53,8 +59,10 @@ function SpellSlotsLevel({ isEditMode, levelIndex }: SpellSlotsLevelProps) {
               variant="outline"
               size="sm"
               onPress={handleAddSlot}
+              disabled={isAddDisabled}
+              opacity={isAddDisabled ? '0.3' : '1'}
             >
-              Add slot
+              {isAddDisabled ? 'Max' : 'Add slot'}
             </Button>
           </HStack>
         )}
