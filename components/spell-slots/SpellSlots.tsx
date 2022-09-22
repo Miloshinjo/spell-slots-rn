@@ -2,11 +2,7 @@ import { useState } from 'react';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-import SpellSlotsLevel from './SpellSlotsLevel';
-import useSpellSlotsState from './useSpellSlotsState';
-
 import {
-  Text,
   Box,
   Button,
   Flex,
@@ -19,22 +15,17 @@ import {
 import ClearSlots from './ClearSlots';
 import { MAX_LEVEL_LIMIT } from '../../constants/preferences';
 
+import useSlotsStore from './useStore';
+import SpellSlotsLevel from './SpellSlotsLevel';
+
 export default function SpellSlots() {
   const [isEditMode, setEditMode] = useState(false);
 
-  const {
-    spellSlotsLevels,
-    addLevel,
-    isFresh,
-    isLoadingFromStorage,
-    removeLevel,
-    toggleSlot,
-    addSlot,
-    removeSlot,
-    clearSlots,
-  } = useSpellSlotsState();
+  const addLevelZustand = useSlotsStore((state) => state.addLevel);
+  const removeLevelZustand = useSlotsStore((state) => state.removeLevel);
+  const numberOfLevels = useSlotsStore((state) => state.levels.length);
 
-  const isAtMaxLevel = spellSlotsLevels.size >= MAX_LEVEL_LIMIT;
+  const isAtMaxLevel = numberOfLevels >= MAX_LEVEL_LIMIT;
 
   return (
     <Box flex="1">
@@ -54,7 +45,7 @@ export default function SpellSlots() {
             leftIcon={<Icon size="sm" as={MaterialIcons} name="remove" />}
             colorScheme="black"
             variant="outline"
-            onPress={removeLevel}
+            onPress={removeLevelZustand}
           >
             Remove Level
           </Button>
@@ -67,7 +58,7 @@ export default function SpellSlots() {
             }
             colorScheme="black"
             variant="outline"
-            onPress={addLevel}
+            onPress={addLevelZustand}
             disabled={isAtMaxLevel}
             opacity={isAtMaxLevel ? '0.3' : '1'}
           >
@@ -76,9 +67,8 @@ export default function SpellSlots() {
         </HStack>
       )}
 
-      {spellSlotsLevels.size === 0 ? (
-        !isEditMode &&
-        !isLoadingFromStorage && (
+      {numberOfLevels === 0 ? (
+        !isEditMode && (
           <Center flex="1">
             <Button
               onPress={() => {
@@ -92,29 +82,26 @@ export default function SpellSlots() {
       ) : (
         <>
           <ScrollView px="4" showsVerticalScrollIndicator={false} pb="24">
-            {Array.from(spellSlotsLevels).map(([level, slots]) => {
+            {[...Array(numberOfLevels).keys()].map((_, i) => {
               return (
                 <SpellSlotsLevel
+                  key={i}
                   isEditMode={isEditMode}
-                  addSlot={addSlot}
-                  removeSlot={removeSlot}
-                  key={level}
-                  toggleSlot={toggleSlot}
-                  level={level}
-                  slots={slots}
+                  levelIndex={i}
                 />
               );
             })}
           </ScrollView>
         </>
       )}
+
       <Flex
         borderTopWidth={1}
         borderTopColor="gray.300"
         flexDirection="row"
         mt="auto"
       >
-        <ClearSlots isDisabled={isFresh} clearSlots={clearSlots} />
+        <ClearSlots />
         <Button
           variant={isEditMode ? 'solid' : 'subtle'}
           colorScheme={isEditMode ? 'primary' : 'gray'}

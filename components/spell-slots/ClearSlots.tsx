@@ -1,17 +1,16 @@
 import { Box, Button, Popover, Text } from 'native-base';
 import { useState } from 'react';
-import type { GestureResponderEvent } from 'react-native';
+import useSlotsStore from './useStore';
 
-type ClearSlotsProps = {
-  isDisabled: boolean;
-  clearSlots: () => void;
-};
-
-export default function ClearSlots({
-  isDisabled,
-  clearSlots,
-}: ClearSlotsProps) {
+export default function ClearSlots() {
   const [isOpen, setOpen] = useState(false);
+
+  const isFresh = !useSlotsStore((state) =>
+    state.levels.flat().some((slot) => slot === true)
+  );
+
+  const clearSlots = useSlotsStore((state) => state.clearSlots);
+
   return (
     <Box flex="1">
       <Popover
@@ -28,8 +27,8 @@ export default function ClearSlots({
               borderRightWidth="1"
               borderRightColor="gray.300"
               borderRadius="0"
-              disabled={isDisabled}
-              opacity={isDisabled ? '.3' : '1'}
+              disabled={isFresh}
+              opacity={isFresh ? '.3' : '1'}
               onPress={() => {
                 setOpen(true);
               }}
