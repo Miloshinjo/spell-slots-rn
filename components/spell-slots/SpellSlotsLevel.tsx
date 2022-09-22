@@ -18,13 +18,13 @@ function SpellSlotsLevel({ isEditMode, levelIndex }: SpellSlotsLevelProps) {
   const addSlot = useSlotsStore((state) => state.addSlot);
   const removeSlot = useSlotsStore((state) => state.removeSlot);
 
-  const handleAddSlot = () => {
+  function handleAddSlot() {
     addSlot(levelIndex);
-  };
+  }
 
-  const handleRemoveSlot = () => {
+  function handleRemoveSlot() {
     removeSlot(levelIndex);
-  };
+  }
 
   const isAddDisabled = slots.length >= MAX_SLOTS_LIMIT;
   const isRemoveDisabled = slots.length <= 1;

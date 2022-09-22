@@ -1,4 +1,4 @@
-import { Box, Button, Popover, Text } from 'native-base';
+import { Box, Button, Popover } from 'native-base';
 import { useState } from 'react';
 import useSlotsStore from './useSlotsStore';
 
@@ -10,6 +10,19 @@ export default function ClearSlots() {
   );
 
   const clearSlots = useSlotsStore((state) => state.clearSlots);
+
+  function handleOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
+  function handleClearAll() {
+    clearSlots();
+    handleClose();
+  }
 
   return (
     <Box flex="1">
@@ -29,9 +42,7 @@ export default function ClearSlots() {
               borderRadius="0"
               disabled={isFresh}
               opacity={isFresh ? '.3' : '1'}
-              onPress={() => {
-                setOpen(true);
-              }}
+              onPress={handleOpen}
             >
               Clear
             </Button>
@@ -42,30 +53,20 @@ export default function ClearSlots() {
           <Popover.Arrow />
           <Popover.CloseButton
             accessibilityLabel="Close popup"
-            onPress={() => {
-              setOpen(false);
-            }}
+            onPress={handleClose}
           />
           <Popover.Header>Clear all slots</Popover.Header>
           <Popover.Body>This will clear all used up slots.</Popover.Body>
           <Popover.Footer justifyContent="flex-end">
             <Button.Group space={2}>
               <Button
-                onPress={() => {
-                  setOpen(false);
-                }}
+                onPress={handleClose}
                 colorScheme="coolGray"
                 variant="ghost"
               >
                 Cancel
               </Button>
-              <Button
-                onPress={() => {
-                  setOpen(false);
-                  clearSlots();
-                }}
-                colorScheme="info"
-              >
+              <Button onPress={handleClearAll} colorScheme="info">
                 Yes, clear All
               </Button>
             </Button.Group>

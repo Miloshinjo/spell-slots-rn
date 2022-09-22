@@ -2,21 +2,13 @@ import { useState } from 'react';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  ScrollView,
-  Icon,
-  Center,
-  Image,
-} from 'native-base';
-import ClearSlots from './ClearSlots';
+import { Box, Button, HStack, Icon, Center, FlatList } from 'native-base';
+
 import { MAX_LEVEL_LIMIT } from '../../constants/preferences';
 
 import useSlotsStore from './useSlotsStore';
 import SpellSlotsLevel from './SpellSlotsLevel';
+import BottomMenu from './BottomMenu';
 
 export default function SpellSlots() {
   const [isEditMode, setEditMode] = useState(false);
@@ -27,18 +19,16 @@ export default function SpellSlots() {
 
   const isAtMaxLevel = numberOfLevels >= MAX_LEVEL_LIMIT;
 
+  function handleSetEditMode() {
+    setEditMode(true);
+  }
+
+  function handleToggleEditMode() {
+    setEditMode((p) => !p);
+  }
+
   return (
     <Box flex="1">
-      <Flex direction="row" justifyContent="space-between" px="4">
-        <Image
-          source={require('../../assets/images/logo-full.png')}
-          width="40"
-          height="20"
-          alt="Logo"
-          resizeMode="contain"
-        />
-      </Flex>
-
       {isEditMode && (
         <HStack p="4" justifyContent="space-between">
           <Button
@@ -70,51 +60,25 @@ export default function SpellSlots() {
       {numberOfLevels === 0 ? (
         !isEditMode && (
           <Center flex="1">
-            <Button
-              onPress={() => {
-                setEditMode(true);
-              }}
-            >
-              Start Editing
-            </Button>
+            <Button onPress={handleSetEditMode}>Start Editing</Button>
           </Center>
         )
       ) : (
-        <>
-          <ScrollView px="4" showsVerticalScrollIndicator={false} pb="24">
-            {[...Array(numberOfLevels).keys()].map((_, i) => {
-              return (
-                <SpellSlotsLevel
-                  key={i}
-                  isEditMode={isEditMode}
-                  levelIndex={i}
-                />
-              );
-            })}
-          </ScrollView>
-        </>
+        <FlatList
+          px="4"
+          pb="24"
+          showsVerticalScrollIndicator={false}
+          data={[...Array(numberOfLevels).keys()]}
+          renderItem={(item) => (
+            <SpellSlotsLevel isEditMode={isEditMode} levelIndex={item.index} />
+          )}
+        />
       )}
 
-      <Flex
-        borderTopWidth={1}
-        borderTopColor="gray.300"
-        flexDirection="row"
-        mt="auto"
-      >
-        <ClearSlots />
-        <Button
-          variant={isEditMode ? 'solid' : 'subtle'}
-          colorScheme={isEditMode ? 'primary' : 'gray'}
-          flex="1"
-          size="lg"
-          alignItems="center"
-          borderRadius="none"
-          py="4"
-          onPress={() => setEditMode((p) => !p)}
-        >
-          {isEditMode ? 'Save' : 'Edit'}
-        </Button>
-      </Flex>
+      <BottomMenu
+        isEditMode={isEditMode}
+        toggleEditMode={handleToggleEditMode}
+      />
     </Box>
   );
 }
