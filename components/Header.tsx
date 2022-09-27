@@ -4,10 +4,7 @@ export default function Header() {
   return (
     <Flex direction="row" justifyContent="space-between" px="4">
       <Image
-        source={{
-          uri: require('../assets/images/logo-full.png'),
-          cache: 'only-if-cached',
-        }}
+        source={require('../assets/images/logo-full.png')}
         width="40"
         height="20"
         alt="Logo"
